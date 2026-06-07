@@ -19,34 +19,15 @@
 
 .va-item.va-active .va-thumb { display: none; }
 
-.va-item.va-hero {
-  grid-template-columns: 1fr;
-  background: #fff;
-  cursor: default;
-  border-bottom: 1px solid rgba(0,0,0,0.08);
-  max-height: 300px;
-  opacity: 1;
-  overflow: hidden;
-  transition: max-height 0.8s cubic-bezier(0.4,0,0.2,1), opacity 0.5s ease, border-bottom-width 0.4s ease;
-}
-
-.va-item.va-hero:not(.va-active) { max-height: 0; opacity: 0; border-bottom-width: 0; }
-
-.va-item.va-hero .va-item-header { padding: 32px 0 0; min-height: unset; align-items: flex-start; }
-
-.va-item.va-hero .va-item-title { font-family: 'Roboto', sans-serif; font-size: clamp(22px, 2.6vw, 34px); font-weight: 300; line-height: 1.25; color: #3a3a3a; }
-
-.va-item.va-hero .va-chevron { display: none; }
-
-.va-item.va-hero .va-item-body { grid-column: 1; }
-
 .va-item-title p { font-size: 54.64px; font-weight: 300; color: #636363; line-height: 64.0381px; height: 221px; margin: 0; }
 
-li.va-item.va-video:nth-child(2) { background-color: #757575; }
+li.va-item.va-video:nth-child(1) { background-color: #757575; }
 
-li.va-item.va-video:nth-child(3) { background-color: #666; }
+li.va-item.va-video:nth-child(2) { background-color: #666; }
 
-li.va-item.va-video:nth-child(4) { background-color: #5c5c5c; }
+li.va-item.va-video:nth-child(3) { background-color: #5c5c5c; }
+
+li.va-item.va-video:nth-child(4) { background-color: #525252; }
 
 .va-item.va-video .va-item-title { font-size: min(1.5vw, 1.5rem); font-weight: 400; line-height: 1.167; align-self: center; }
 
@@ -113,7 +94,6 @@ li.va-item.va-video:nth-child(4) { background-color: #5c5c5c; }
   .va-block { flex-direction: column-reverse; height: auto; }
   .va-left { width: 100%; max-width: 100%; }
   .va-right { height: 260px; }
-  .va-hero { display: none; }
   .va-item { grid-template-columns: 105px 1fr; }
   .va-item.va-video.va-active { padding-left: 16px; }
   .va-item.va-active .va-item-body { padding: 6px 18px 40px 14px; }
@@ -125,9 +105,6 @@ li.va-item.va-video:nth-child(4) { background-color: #5c5c5c; }
   .va-item.va-video .va-item-title { font-size: 17px; }
   .va-item.va-active.va-video .va-item-title { font-size: 22px; }
   .va-chevron svg { width: 20px; height: 20px; }
-  .va-hero-mobile > p { font-family: 'Roboto', sans-serif; font-size: 2.5rem; font-weight: 300; line-height: 1.172; color: #636363; padding: 0 30px; padding-bottom: 30px !important; }
 }
-
-@media (min-width: 1026px) { .va-hero-mobile { display: none; } }
 
 @media (max-width: 1080px) { .va-item-title p { font-size: 43px; line-height: 1.12; height: 144px; } }

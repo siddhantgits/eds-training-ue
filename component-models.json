@@ -216,32 +216,6 @@
     ]
   },
   {
-    "id": "video-accordion-hero",
-    "fields": [
-      {
-        "component": "reference",
-        "valueType": "string",
-        "name": "image",
-        "label": "Hero Image",
-        "multi": false
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "imageAlt",
-        "label": "Hero Image Alt Text",
-        "value": ""
-      },
-      {
-        "component": "richtext",
-        "name": "title",
-        "value": "",
-        "label": "Hero Title",
-        "valueType": "string"
-      }
-    ]
-  },
-  {
     "id": "video-accordion-video",
     "fields": [
       {

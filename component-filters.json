@@ -43,7 +43,6 @@
   {
     "id": "video-accordion",
     "components": [
-      "video-accordion-hero",
       "video-accordion-video"
     ]
   }

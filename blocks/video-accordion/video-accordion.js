@@ -45,21 +45,7 @@ export default function decorate(block) {
   const rows = [...block.children];
   if (!rows.length) return;
 
-  /* The first row is the hero item; the rest are video items.
-     (Order is guaranteed by the authoring model / filter.) */
-  const heroRow = rows[0];
-  const videoRows = rows.slice(1);
-
-  // ---- Hero: image is the picture cell; title is the rich-text cell. ----
-  const heroCells = [...heroRow.children];
-  const heroPicture = heroRow.querySelector('picture');
-  // Fields are image, alt, title (in order) — title is the last non-empty
-  // cell that isn't the image cell.
-  const heroTitleCell = heroCells
-    .filter((c) => !c.querySelector('picture') && c.textContent.trim() !== '')
-    .pop();
-
-  // ---- Build the shell. ----
+  // Build the shell: left = accordion list, right = media stage.
   const left = document.createElement('div');
   left.className = 'va-left';
   const list = document.createElement('ul');
@@ -72,54 +58,18 @@ export default function decorate(block) {
   media.className = 'va-media-container';
   right.append(media);
 
-  const heroMobile = document.createElement('div');
-  heroMobile.className = 'va-hero-mobile';
-
-  const showHeroImage = () => {
-    media.textContent = '';
-    if (heroPicture) media.append(heroPicture.cloneNode(true));
-  };
-
-  // ---- Hero accordion item (preserve instrumentation from the source row). ----
-  const heroItem = document.createElement('li');
-  heroItem.className = 'va-item va-hero va-active';
-  moveInstrumentation(heroRow, heroItem);
-
-  const heroHeader = document.createElement('div');
-  heroHeader.className = 'va-item-header';
-  const heroTitleSpan = document.createElement('span');
-  heroTitleSpan.className = 'va-item-title';
-  if (heroTitleCell) {
-    // Move the real title node so its richtext instrumentation survives.
-    while (heroTitleCell.firstChild) heroTitleSpan.append(heroTitleCell.firstChild);
-    moveInstrumentation(heroTitleCell, heroTitleSpan);
-  }
-  const heroChevron = document.createElement('span');
-  heroChevron.className = 'va-chevron';
-  heroHeader.append(heroTitleSpan, heroChevron);
-
-  const heroBody = document.createElement('div');
-  heroBody.className = 'va-item-body';
-  heroItem.append(heroHeader, heroBody);
-  list.append(heroItem);
-
-  // Mobile hero title mirrors the same content.
-  heroMobile.innerHTML = heroTitleSpan.innerHTML;
-  showHeroImage();
-
-  // Video items.
-  videoRows.forEach((row) => {
+  // Parse + render each authored video row.
+  const items = rows.map((row) => {
     const cells = [...row.children];
-    // The video link lives in the first cell (model field order: link first).
+    // Field order from the model: link, thumbnail, thumbnailAlt, title, description.
     const linkCell = cells[0];
     const link = linkCell?.querySelector('a');
     const videoId = getYoutubeId(link?.href || link?.textContent);
 
-    // Thumbnail picture if authored; otherwise derive from YouTube.
     const thumbPicture = row.querySelector('picture');
     const ytThumb = videoId ? `https://img.youtube.com/vi/${videoId}/mqdefault.jpg` : '';
 
-    // Remaining text cells, in author order, excluding media/link cells.
+    // Remaining text cells (skip the link cell + any media cell).
     const textCells = cells
       .slice(1)
       .filter((c) => !c.querySelector('picture') && c.textContent.trim() !== '');
@@ -131,14 +81,13 @@ export default function decorate(block) {
     li.className = 'va-item va-video';
     moveInstrumentation(row, li);
 
-    // thumb
+    // Thumb
     const thumb = document.createElement('div');
     thumb.className = 'va-thumb';
     if (thumbPicture) {
       thumb.append(thumbPicture.cloneNode(true));
     } else if (ytThumb) {
-      const optimized = createOptimizedPicture(ytThumb, title, false, [{ width: '320' }]);
-      thumb.append(optimized);
+      thumb.append(createOptimizedPicture(ytThumb, title, false, [{ width: '320' }]));
     }
     const playIcon = document.createElement('span');
     playIcon.className = 'va-play-icon';
@@ -151,7 +100,7 @@ export default function decorate(block) {
     overlay.className = 'va-overlay';
     thumb.append(playIcon, overlay);
 
-    // header
+    // Header
     const header = document.createElement('div');
     header.className = 'va-item-header';
     const titleSpan = document.createElement('span');
@@ -167,7 +116,7 @@ export default function decorate(block) {
     chevron.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M30.48 7.24l-14.48 14.48-14.48-14.48-1.52 1.52 16 16 16-16z"/></svg>';
     header.append(titleSpan, chevron);
 
-    // body
+    // Body
     const body = document.createElement('div');
     body.className = 'va-item-body';
     if (descCell) {
@@ -180,30 +129,37 @@ export default function decorate(block) {
 
     const resolvedThumbSrc = thumbPicture?.querySelector('img')?.src || ytThumb;
 
+    const openInStage = () => {
+      if (videoId) {
+        showVideoPoster(videoId, title, media, resolvedThumbSrc);
+      } else if (resolvedThumbSrc) {
+        media.textContent = '';
+        const img = document.createElement('img');
+        img.src = resolvedThumbSrc;
+        img.alt = title;
+        media.append(img);
+      }
+    };
+
     li.addEventListener('click', () => {
       const alreadyOpen = li.classList.contains('va-active');
       list.querySelectorAll('.va-item.va-video').forEach((v) => v.classList.remove('va-active'));
       if (!alreadyOpen) {
         li.classList.add('va-active');
-        heroItem.classList.remove('va-active');
-        if (videoId) {
-          showVideoPoster(videoId, title, media, resolvedThumbSrc);
-        } else if (resolvedThumbSrc) {
-          media.textContent = '';
-          const img = document.createElement('img');
-          img.src = resolvedThumbSrc;
-          img.alt = title;
-          media.append(img);
-        }
-      } else {
-        heroItem.classList.add('va-active');
-        showHeroImage();
+        openInStage();
       }
     });
+
+    return { li, openInStage };
   });
 
-  // ---- Swap the block contents for the assembled structure. ----
   block.textContent = '';
   block.classList.add('va-block');
-  block.append(left, right, heroMobile);
+  block.append(left, right);
+
+  // No hero: open the first video by default so the right panel isn't empty.
+  if (items.length) {
+    items[0].li.classList.add('va-active');
+    items[0].openInStage();
+  }
 }
