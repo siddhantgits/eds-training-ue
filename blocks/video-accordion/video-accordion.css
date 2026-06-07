@@ -19,7 +19,7 @@
 
 .va-item.va-active .va-thumb { display: none; }
 
-.va-item-title p { font-size: 54.64px; font-weight: 300; color: #636363; line-height: 64.0381px; height: 221px; margin: 0; }
+.va-item-title p { margin: 0; font: inherit; color: inherit; }
 
 li.va-item.va-video:nth-child(1) { background-color: #757575; }
 
@@ -107,4 +107,4 @@ li.va-item.va-video:nth-child(4) { background-color: #525252; }
   .va-chevron svg { width: 20px; height: 20px; }
 }
 
-@media (max-width: 1080px) { .va-item-title p { font-size: 43px; line-height: 1.12; height: 144px; } }
+@media (max-width: 1080px) { .va-item.va-active.va-video .va-item-title { font-size: 22px; } }
