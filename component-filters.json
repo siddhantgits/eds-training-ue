@@ -15,7 +15,8 @@
       "hero",
       "cards",
       "columns",
-      "fragment"
+      "fragment",
+      "video-accordion"
     ]
   },
   {
@@ -37,6 +38,13 @@
       "image",
       "button",
       "title"
+    ]
+  },
+  {
+    "id": "video-accordion",
+    "components": [
+      "video-accordion-hero",
+      "video-accordion-video"
     ]
   }
 ]

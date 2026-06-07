@@ -214,5 +214,70 @@
         "valueType": "string"
       }
     ]
+  },
+  {
+    "id": "video-accordion-hero",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "image",
+        "label": "Hero Image",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "imageAlt",
+        "label": "Hero Image Alt Text",
+        "value": ""
+      },
+      {
+        "component": "richtext",
+        "name": "title",
+        "value": "",
+        "label": "Hero Title",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "video-accordion-video",
+    "fields": [
+      {
+        "component": "aem-content",
+        "valueType": "string",
+        "name": "link",
+        "label": "Video Link (YouTube URL)"
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "thumbnail",
+        "label": "Thumbnail Image (optional)",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "thumbnailAlt",
+        "label": "Thumbnail Alt Text",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "label": "Video Title",
+        "value": ""
+      },
+      {
+        "component": "richtext",
+        "name": "description",
+        "value": "",
+        "label": "Description",
+        "valueType": "string"
+      }
+    ]
   }
 ]
